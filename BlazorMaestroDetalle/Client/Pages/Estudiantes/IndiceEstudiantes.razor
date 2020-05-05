@@ -1,0 +1,56 @@
+﻿@page "/estudiantes"
+@inject HttpClient http
+
+<h3>Indice Estudiantes</h3>
+
+<div class="form-group">
+    <a class="btn btn-success" href="estudiantes/crear">Nuevo Estudiante</a>
+</div>
+
+@if (Estudiantes == null)
+{
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" />
+}
+else if (Estudiantes.Count == 0)
+{
+    <text>No hay estudiantes para mostrar</text>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var estudiante in Estudiantes)
+            {
+                <tr>
+                    <td>
+                        <button>Editar</button>
+                    </td>
+                    <td>
+                        @estudiante.Id
+                    </td>
+                    <td>
+                        @estudiante.Nombre
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+    List<Estudiante> Estudiantes { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Estudiantes = await http.GetFromJsonAsync<List<Estudiante>>("api/estudiantes");
+    }
+}
