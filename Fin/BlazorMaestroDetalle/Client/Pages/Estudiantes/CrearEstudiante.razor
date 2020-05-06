@@ -1,0 +1,28 @@
+﻿@page "/estudiantes/crear"
+@inject HttpClient http
+@inject NavigationManager navigationManager
+
+<h3>Crear Estudiante</h3>
+
+<FormularioEstudiantes estudiante="estudiante" OnValidSubmit="OnValidSubmit" />
+
+@code {
+    Estudiante estudiante = new Estudiante();
+
+    private async Task OnValidSubmit()
+    {
+        var respuesta = await http.PostAsJsonAsync("api/estudiantes", estudiante);
+
+        var cuerpoRespuesta = await respuesta.Content.ReadAsStringAsync();
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("estudiantes");
+        }
+        else
+        {
+            Console.WriteLine(cuerpoRespuesta);
+            Console.WriteLine((int)respuesta.StatusCode);
+        }
+    }
+}
